@@ -17,7 +17,7 @@ def calculate_cost(counts: Counter) -> int:
     total_cost = 0
     for sku, count in counts.items():
         if not products.get(sku):
-            raise ValueError("Invalid product, SKU not found")
+            return -1
 
         if offer := offers.get(sku):
             if count > offer["count"]:
@@ -32,9 +32,10 @@ def calculate_cost(counts: Counter) -> int:
 class CheckoutSolution:
     def checkout(self, skus: str) -> int:
         if not isinstance(skus, str):
-            raise ValueError("Invalid input, SKUs must be a string")
+            return -1
         counts = Counter([sku.upper() for sku in skus])
         return calculate_cost(counts)
+
 
 
 

@@ -17,16 +17,14 @@ def test_valid_inputs(skus, expected):
 
 
 @pytest.mark.parametrize(
-    "skus,err_msg",
+    "skus",
     [
-        ("ABCDZ", "Invalid product, SKU not found"),
-        (5, "Invalid input, SKUs must be a string"),
+        "ABCDZ",
+        5,
     ],
 )
-def test_invalid_inputs(skus, err_msg):
-    with pytest.raises(ValueError) as e:
-        assert CheckoutSolution().checkout(skus)
+def test_invalid_inputs(skus):
+    assert CheckoutSolution().checkout(skus) == -1
 
-    assert str(e.value) == err_msg
 
 
