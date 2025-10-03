@@ -3,7 +3,7 @@ import typing
 import pydantic
 from pydantic import BaseModel
 
-type Addend = typing.Annotated[int, pydantic.Field(ge=0, le=100)]
+type Addend = typing.Annotated[int, pydantic.Field(strict=True, ge=0, le=100)]
 
 
 class SumSolution:
@@ -17,6 +17,7 @@ class SumOperation(BaseModel):
 
     def sum(self) -> int:
         return self.addend1 + self.addend2
+
 
 
 
