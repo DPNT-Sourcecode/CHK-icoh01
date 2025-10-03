@@ -22,7 +22,7 @@ def turn_exception_into_minus_1():
 class CheckoutSolution:
     @turn_exception_into_minus_1()
     def checkout(self, skus: str) -> int:
-        return Pricer(catalogue=r1_catalogue).checkout(skus)
+        return Pricer(catalogue=r3_catalogue).checkout(skus)
 
 
 class Offer(pydantic.BaseModel):
@@ -84,12 +84,13 @@ class Pricer:
         return total_cost
 
 
-r1_catalogue = Catalogue(
+r3_catalogue = Catalogue(
     offers=[
         Offer(requirements={"A": 3}, price=130),
         Offer(requirements={"A": 5}, price=200),
         Offer(requirements={"B": 2}, price=45),
         Offer(requirements={"E": 2, "B": 1}, price=80),
+        Offer(requirements={"F": 3}, price=20),
     ],
     products={
         "A": 50,
@@ -97,7 +98,9 @@ r1_catalogue = Catalogue(
         "C": 20,
         "D": 15,
         "E": 40,
+        "F": 10,
     },
 )
+
 
 
