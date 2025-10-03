@@ -1,3 +1,5 @@
+import abc
+
 import pydantic
 import structlog
 from collections import Counter
@@ -25,6 +27,12 @@ class CheckoutSolution:
         return Pricer(catalogue=r4_catalogue).checkout(skus)
 
 
+class BaseOffer(abc.ABC):
+    @abc.abstractmethod
+    def are_requirements_met(self, basket: dict[str, int]) -> bool:
+        ...
+
+
 class Offer(pydantic.BaseModel):
     requirements: dict[str, int]
     price: int
@@ -36,7 +44,14 @@ class Offer(pydantic.BaseModel):
         return True
 
 
+class Group(pydantic.BaseModel):
+    requirements: list[str]
+    count: int
+    price: int
+
+
 class Catalogue(pydantic.BaseModel):
+    groups: list[Group]
     offers: list[Offer]
     products: dict[str, int]
 
@@ -48,6 +63,7 @@ class Pricer:
         self.offers = sorted(
             catalogue.offers, key=lambda o: sum(o.requirements.values()), reverse=True
         )
+        self.groups = catalogue.groups
         self.products = catalogue.products
 
     def checkout(self, skus: str) -> int:
@@ -64,6 +80,7 @@ class Pricer:
 
     def calculate_cost(self, counts: dict[str, int]) -> int:
         total_cost = 0
+        for group in self.groups
         for offer in self.offers:
             if not offer.are_requirements_met(counts):
                 continue
@@ -85,6 +102,9 @@ class Pricer:
 
 
 r4_catalogue = Catalogue(
+    groups=[
+        Group(requirements=["S", "T", "X", "Y", "Z"], count=3, price=45),
+    ],
     offers=[
         Offer(requirements={"A": 3}, price=130),
         Offer(requirements={"A": 5}, price=200),
@@ -113,7 +133,7 @@ r4_catalogue = Catalogue(
         "H": 10,
         "I": 35,
         "J": 60,
-        "K": 80,
+        "K": 70,
         "L": 90,
         "M": 15,
         "N": 40,
@@ -121,14 +141,15 @@ r4_catalogue = Catalogue(
         "P": 50,
         "Q": 30,
         "R": 50,
-        "S": 30,
+        "S": 20,
         "T": 20,
         "U": 40,
         "V": 50,
         "W": 20,
-        "X": 90,
-        "Y": 10,
-        "Z": 50,
+        "X": 17,
+        "Y": 20,
+        "Z": 21,
     },
 )
+
 
