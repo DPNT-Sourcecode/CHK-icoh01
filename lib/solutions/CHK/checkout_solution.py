@@ -1,7 +1,21 @@
 from itertools import product
 
 import pydantic
+import structlog
 from collections import Counter
+
+logger = structlog.get_logger()
+
+def turn_exception_into_minus_1():
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                logger.error(e)
+                return -1
+        return wrapper
+    return decorator
 
 
 class Offer(pydantic.BaseModel):
@@ -41,6 +55,7 @@ class CheckoutSolution:
         counts = Counter([sku for sku in skus])
         if not all(self.products.get(k) for k in counts.keys()):
             raise ValueError("Invalid product, not in the catalogue")
+        return counts
 
     def calculate_cost(self, counts: Counter) -> int:
         total_cost = 0
@@ -77,6 +92,7 @@ class CheckoutSolution:
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
 

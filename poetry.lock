@@ -652,6 +652,18 @@ docopt = ">=0.6.2,<0.7.0"
 websocket-client = ">=1.2.3,<2.0.0"
 
 [[package]]
+name = "structlog"
+version = "25.4.0"
+description = "Structured Logging for Python"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "structlog-25.4.0-py3-none-any.whl", hash = "sha256:fe809ff5c27e557d14e613f45ca441aabda051d119ee5a0102aaba6ce40eed2c"},
+    {file = "structlog-25.4.0.tar.gz", hash = "sha256:186cd1b0a8ae762e29417095664adf1d6a31702160a46dacb7796ea82f7409e4"},
+]
+
+[[package]]
 name = "tdl-client-python"
 version = "0.30.1"
 description = "tdl-client-python"
@@ -732,4 +744,5 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "3b53afa80eee8c5d53bd629e4f736338237cfe890e7df0efd80cc6c44f201a31"
+content-hash = "e65db8dc3f91020a54ac3c79cb6fccfdd7b079800af5b5c9479e8e923278d4a3"
+
