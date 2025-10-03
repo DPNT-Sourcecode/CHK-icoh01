@@ -1,0 +1,12 @@
+[tools]
+poetry = "2.1.4"
+python = "3.12"
+
+
+[tasks]
+test = "poetry run pytest"
+coverage = "poetry run pytest --cov-report term-missing --cov=lib/solutions ."
+format = "ruff format ."
+lint = "ruff check --fix"
+typecheck = "poetry run mypy ."
+export-deps = "poetry export --without-hashes --format=requirements.txt > requirements.txt --with dev"
