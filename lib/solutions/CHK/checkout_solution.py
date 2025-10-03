@@ -1,3 +1,5 @@
+from itertools import product
+
 import pydantic
 from collections import Counter
 
@@ -28,11 +30,17 @@ class CheckoutSolution:
         "E": 40,
     }
 
+    @turn_exception_into_minus_1()
     def checkout(self, skus: str) -> int:
-        if not isinstance(skus, str):
-            return -1
-        counts = Counter([sku for sku in skus])
+        counts = self.get_validated_count(skus)
         return self.calculate_cost(counts)
+
+    def get_validated_count(self, skus: str) -> dict[str, int]:
+        if not isinstance(skus, str):
+            raise ValueError("Invalid input type, expected str")
+        counts = Counter([sku for sku in skus])
+        if not all(self.products.get(k) for k in counts.keys()):
+            raise ValueError("Invalid product, not in the catalogue")
 
     def calculate_cost(self, counts: Counter) -> int:
         total_cost = 0
@@ -69,6 +77,7 @@ class CheckoutSolution:
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
 
