@@ -27,13 +27,13 @@ class CheckoutSolution:
         return Pricer(catalogue=r4_catalogue).checkout(skus)
 
 
-class BaseOffer(abc.ABC):
+class BaseOffer(abc.ABC, pydantic.BaseModel):
     @abc.abstractmethod
     def are_requirements_met(self, basket: dict[str, int]) -> bool:
         ...
 
 
-class Offer(pydantic.BaseModel):
+class Offer(BaseOffer):
     requirements: dict[str, int]
     price: int
 
@@ -44,10 +44,13 @@ class Offer(pydantic.BaseModel):
         return True
 
 
-class Group(pydantic.BaseModel):
+class Group(BaseOffer):
     requirements: list[str]
     count: int
     price: int
+
+    def are_requirements_met(self, basket: dict[str, int]) -> bool:
+        return sum(basket.get(req, 0) for req in self.requirements) > self.count
 
 
 class Catalogue(pydantic.BaseModel):
@@ -63,8 +66,8 @@ class Pricer:
         self.offers = sorted(
             catalogue.offers, key=lambda o: sum(o.requirements.values()), reverse=True
         )
-        self.groups = catalogue.groups
         self.products = catalogue.products
+        self.groups = catalogue.groups
 
     def checkout(self, skus: str) -> int:
         counts = self.get_validated_count(skus)
@@ -78,9 +81,17 @@ class Pricer:
             raise ValueError("Invalid product, not in the catalogue")
         return counts
 
-    def calculate_cost(self, counts: dict[str, int]) -> int:
+    def _handle_products(self, counts: dict[str, int]) -> int:
         total_cost = 0
-        for group in self.groups
+
+        for product, count in counts.items():
+            total_cost += self.products[product] * count
+        return total_cost
+
+
+    def _handle_offers(self, counts: dict[str, int]) -> int:
+        total_cost = 0
+
         for offer in self.offers:
             if not offer.are_requirements_met(counts):
                 continue
@@ -95,9 +106,24 @@ class Pricer:
             for req, req_count in offer.requirements.items():
                 counts[req] -= req_count * max_apply_count
             total_cost += offer.price * max_apply_count
+        return total_cost
 
-        for product, count in counts.items():
-            total_cost += self.products[product] * count
+    def _handle_groups(self, counts: dict[str, int]) -> int:
+        total_cost = 0
+
+        for group in self.groups:
+            if not group.are_requirements_met(counts):
+                continue
+
+        return total_cost
+
+
+
+    def calculate_cost(self, counts: dict[str, int]) -> int:
+        total_cost = 0
+        total_cost += self._handle_offers(counts)
+        total_cost +=self._handle_groups(counts)
+        total_cost +=self._handle_products(counts)
         return total_cost
 
 
@@ -151,5 +177,6 @@ r4_catalogue = Catalogue(
         "Z": 21,
     },
 )
+
 
 
