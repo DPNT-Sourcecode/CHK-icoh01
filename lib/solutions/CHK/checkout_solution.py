@@ -20,7 +20,7 @@ def calculate_cost(counts: Counter) -> int:
             return -1
 
         if offer := offers.get(sku):
-            if count > offer["count"]:
+            if count >= offer["count"]:
                 total_cost += offer["price"] * (count // offer["count"])
                 count = count % offer["count"]
         if count:
@@ -35,6 +35,7 @@ class CheckoutSolution:
             return -1
         counts = Counter([sku for sku in skus])
         return calculate_cost(counts)
+
 
 
 
