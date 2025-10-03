@@ -33,7 +33,7 @@ class CheckoutSolution:
     def checkout(self, skus: str) -> int:
         if not isinstance(skus, str):
             return -1
-        counts = Counter([sku.upper() for sku in skus])
+        counts = Counter([sku for sku in skus])
         return calculate_cost(counts)
 
 
