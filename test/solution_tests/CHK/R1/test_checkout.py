@@ -19,5 +19,3 @@ class MockIntType:
 def test_valid_inputs(addend1, addend2, expected):
     assert CheckoutSolution().checkout(addend1, addend2) == expected
 
-
-

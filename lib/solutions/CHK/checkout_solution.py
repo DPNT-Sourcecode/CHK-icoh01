@@ -18,8 +18,12 @@ class CheckoutSolution:
             raise ValueError("Invalid input, SKUs must be a string")
         raw_skus = [sku for sku in skus]
         counts = Counter(raw_skus)
-
-
+        total_cost = 0
+        for sku, count in counts.items():
+            if offer:= offers.get(sku):
+                if count > offer["count"]:
+                    total_cost += offer["price"] * (count // offer["count"])
+                    count -= offer["count"]
 
 
 
