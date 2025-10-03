@@ -1,8 +1,21 @@
+import typing
+
+import pydantic
+from pydantic import BaseModel
+
 
 class SumSolution:
     
     def compute(self, x: int, y: int):
-        if 0 <= x <= 100 or 0 <= y <= 100:
-            raise ValueError("Invalid argument, must be integer between 0 and 100")
-        raise NotImplementedError()
+        SumOperation(addend1=x, addend2=y)
+        return x + y
+
+
+class SumOperation(BaseModel):
+    addend1: typing.Annotated[int, pydantic.Field(min=0, max=100)]
+    addend2: typing.Annotated[int, pydantic.Field(min=0, max=100)]
+
+    def sum(self):
+        return self.addend1 + self.addend2
+
 
