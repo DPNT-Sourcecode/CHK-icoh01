@@ -27,30 +27,15 @@ class CheckoutSolution:
         return Pricer(catalogue=r4_catalogue).checkout(skus)
 
 
-class BaseOffer(abc.ABC, pydantic.BaseModel):
-    @abc.abstractmethod
-    def are_requirements_met(self, basket: dict[str, int]) -> bool:
-        ...
-
-
-class Offer(BaseOffer):
+class Offer(pydantic.BaseModel):
     requirements: dict[str, int]
     price: int
 
-    def are_requirements_met(self, basket: dict[str, int]) -> bool:
-        for product, required_quantity in self.requirements.items():
-            if not basket.get(product) or basket[product] < required_quantity:
-                return False
-        return True
 
-
-class Group(BaseOffer):
+class Group(pydantic.BaseModel):
     requirements: list[str]
     count: int
     price: int
-
-    def are_requirements_met(self, basket: dict[str, int]) -> bool:
-        return sum(basket.get(req, 0) for req in self.requirements) > self.count
 
 
 class Catalogue(pydantic.BaseModel):
@@ -88,42 +73,40 @@ class Pricer:
             total_cost += self.products[product] * count
         return total_cost
 
-
     def _handle_offers(self, counts: dict[str, int]) -> int:
         total_cost = 0
 
         for offer in self.offers:
-            if not offer.are_requirements_met(counts):
-                continue
-            max_apply_count = min(
+            apply_count = min(
                 (
                     counts[req] // req_count
                     for req, req_count in offer.requirements.items()
                 )
             )
-            if max_apply_count == 0:
+            if apply_count == 0:
                 continue
             for req, req_count in offer.requirements.items():
-                counts[req] -= req_count * max_apply_count
-            total_cost += offer.price * max_apply_count
+                counts[req] -= req_count * apply_count
+            total_cost += offer.price * apply_count
         return total_cost
 
     def _handle_groups(self, counts: dict[str, int]) -> int:
         total_cost = 0
 
         for group in self.groups:
-            if not group.are_requirements_met(counts):
+            apply_count = (
+                sum(counts.get(req, 0) for req in self.requirements) // group.count
+            )
+            if apply_count == 0:
                 continue
 
         return total_cost
 
-
-
     def calculate_cost(self, counts: dict[str, int]) -> int:
         total_cost = 0
         total_cost += self._handle_offers(counts)
-        total_cost +=self._handle_groups(counts)
-        total_cost +=self._handle_products(counts)
+        total_cost += self._handle_groups(counts)
+        total_cost += self._handle_products(counts)
         return total_cost
 
 
@@ -177,6 +160,7 @@ r4_catalogue = Catalogue(
         "Z": 21,
     },
 )
+
 
 
 
