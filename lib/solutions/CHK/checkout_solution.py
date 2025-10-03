@@ -95,11 +95,18 @@ class Pricer:
 
         for group in self.groups:
             apply_count = (
-                sum(counts.get(req, 0) for req in self.requirements) // group.count
+                sum(counts.get(req, 0) for req in group.requirements) // group.count
             )
             if apply_count == 0:
                 continue
-
+            products_to_remove = group.count * apply_count
+            for req in group.requirements:
+                if not products_to_remove:
+                    break
+                to_remove = min(products_to_remove, counts[req])
+                counts[req] -= to_remove
+                products_to_remove =- to_remove
+            total_cost += group.price * apply_count
         return total_cost
 
     def calculate_cost(self, counts: dict[str, int]) -> int:
@@ -160,7 +167,3 @@ r4_catalogue = Catalogue(
         "Z": 21,
     },
 )
-
-
-
-
