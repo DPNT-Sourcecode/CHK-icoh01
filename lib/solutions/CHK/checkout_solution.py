@@ -35,8 +35,3 @@ class CheckoutSolution:
             return -1
         counts = Counter([sku for sku in skus])
         return calculate_cost(counts)
-
-
-
-
-
