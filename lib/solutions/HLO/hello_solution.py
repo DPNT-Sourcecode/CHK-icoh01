@@ -1,4 +1,5 @@
 class HelloSolution:
-    def hello(self, friend_name: str) -> str:
-        return f'Hello, {friend_name}!'
+    def hello(self, _: str) -> str:
+        return f'Hello, World!'
+
 
