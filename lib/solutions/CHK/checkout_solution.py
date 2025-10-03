@@ -48,12 +48,12 @@ class CheckoutSolution:
         sorted_offers = sorted(offers_in_play, key=lambda o: sum(o.requirements.values()), reverse=True)
         for offer in sorted_offers:
             # apply offer, reduce counts, recheck validity
-            max_apply_count = max((counts[req] // req_count for req, req_count in offer.requirements.items()))
+            max_apply_count = min((counts[req] // req_count for req, req_count in offer.requirements.items()))
             if max_apply_count == 0:
                 continue
             for req, req_count in offer.requirements.items():
                 counts[req] -= req_count * max_apply_count
-                total_cost += offer.price * max_apply_count
+            total_cost += offer.price * max_apply_count
         for product, count in counts.items():
             if count == 0:
                 continue
@@ -69,6 +69,7 @@ class CheckoutSolution:
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
 
