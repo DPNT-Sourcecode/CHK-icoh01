@@ -22,7 +22,7 @@ def turn_exception_into_minus_1():
 class CheckoutSolution:
     @turn_exception_into_minus_1()
     def checkout(self, skus: str) -> int:
-        return Pricer(catalogue=r3_catalogue).checkout(skus)
+        return Pricer(catalogue=r4_catalogue).checkout(skus)
 
 
 class Offer(pydantic.BaseModel):
@@ -84,13 +84,23 @@ class Pricer:
         return total_cost
 
 
-r3_catalogue = Catalogue(
+r4_catalogue = Catalogue(
     offers=[
         Offer(requirements={"A": 3}, price=130),
         Offer(requirements={"A": 5}, price=200),
         Offer(requirements={"B": 2}, price=45),
         Offer(requirements={"E": 2, "B": 1}, price=80),
         Offer(requirements={"F": 3}, price=20),
+        Offer(requirements={"H": 5}, price=45),
+        Offer(requirements={"H": 10}, price=80),
+        Offer(requirements={"K": 2}, price=150),
+        Offer(requirements={"N": 3, "M": 1}, price=120),
+        Offer(requirements={"P": 5}, price=200),
+        Offer(requirements={"Q": 3}, price=80),
+        Offer(requirements={"R": 3, "Q": 1}, price=150),
+        Offer(requirements={"U": 4}, price=120),
+        Offer(requirements={"V": 2}, price=90),
+        Offer(requirements={"V": 3}, price=130),
     ],
     products={
         "A": 50,
@@ -99,5 +109,26 @@ r3_catalogue = Catalogue(
         "D": 15,
         "E": 40,
         "F": 10,
+        "G": 20,
+        "H": 10,
+        "I": 35,
+        "J": 60,
+        "K": 80,
+        "L": 90,
+        "M": 15,
+        "N": 40,
+        "O": 10,
+        "P": 50,
+        "Q": 30,
+        "R": 50,
+        "S": 30,
+        "T": 20,
+        "U": 40,
+        "V": 50,
+        "W": 20,
+        "X": 90,
+        "Y": 10,
+        "Z": 50,
     },
 )
+
