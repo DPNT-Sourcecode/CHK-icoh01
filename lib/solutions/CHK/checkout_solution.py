@@ -2,14 +2,12 @@ import pydantic
 from collections import Counter
 
 
-class Product(pydantic.BaseModel):
-    name: str
-    price: int
-
-
 class Offer(pydantic.BaseModel):
     requirements: dict[str, int]
     price: int
+
+    def are_requirements_met(self, basket: dict[str, int]) -> bool:
+
 
 
 class CheckoutSolution:
@@ -37,22 +35,14 @@ class CheckoutSolution:
     def calculate_cost(self, counts: Counter) -> int:
         total_cost = 0
         for offer in self.offers:
+            if
             # get applicable offers
             # minimise for cost
+            # calculate price of remaining items
             ...
-        for sku, count in counts.items():
-            #
-            if not self.products.get(sku):
-                return -1
-
-            if offer := self.offers.get(sku):
-                if count >= offer["count"]:
-                    total_cost += offer["price"] * (count // offer["count"])
-                    count = count % offer["count"]
-            if count:
-                total_cost += count * self.products[sku]
 
         return total_cost
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
