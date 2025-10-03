@@ -10,22 +10,23 @@ class MockIntType:
 
 @pytest.mark.parametrize(
     "skus,expected",
-    [("ABCD", 115), ("ABCDABBD", 225), ("AABABADABBCAADBABAAA", 675)],
+    [("ABCD", 115), ("ABCDABBD", 225), ("AABABADABBCAADBABAAA", 675), ("abcd", 115)],
 )
 def test_valid_inputs(skus, expected):
     assert CheckoutSolution().checkout(skus) == expected
 
 
 @pytest.mark.parametrize(
-    "skus",
+    "skus,err_msg",
     [
-        "ABCDZ",
-        5,
-        "abcd",
+        ("ABCDZ", "Invalid product, SKU not found"),
+        (5, "Invalid input, SKUs must be a string"),
     ],
 )
-def test_invalid_inputs(skus):
-    with pytest.raises(ValueError):
+def test_invalid_inputs(skus, err_msg):
+    with pytest.raises(ValueError) as e:
         assert CheckoutSolution().checkout(skus)
+
+    assert str(e.value) == err_msg
 
 
