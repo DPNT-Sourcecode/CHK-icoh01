@@ -38,5 +38,3 @@ def test_valid_inputs(skus, expected):
 )
 def test_invalid_inputs(skus):
     assert CheckoutSolution().checkout(skus) == -1
-
-

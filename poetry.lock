@@ -745,4 +745,3 @@ test = ["websockets"]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
 content-hash = "e65db8dc3f91020a54ac3c79cb6fccfdd7b079800af5b5c9479e8e923278d4a3"
-
