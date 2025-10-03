@@ -7,10 +7,17 @@ products = {
     "D": 15,
 }
 
-offers = {
-    "A": {"count": 3, "price": 130},
-    "B": {"count": 2, "price": 45},
-}
+offers = [
+    ({"A": 1}, 50),
+    ({"A": 3}, 130),
+    ({"A": 5}, 200),
+    ({"B": 1}, 30),
+    ({"B": 2}, 45),
+    ({"C": 1}, 20),
+    ({"D": 1}, 15),
+    ({"E": 1}, 40),
+    ({"E": 2, "B": -1}, 45),
+]
 
 
 def calculate_cost(counts: Counter) -> int:
@@ -35,3 +42,4 @@ class CheckoutSolution:
             return -1
         counts = Counter([sku for sku in skus])
         return calculate_cost(counts)
+
