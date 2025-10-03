@@ -129,7 +129,7 @@ r4_catalogue = Catalogue(
         Offer(requirements={"F": 3}, price=20),
         Offer(requirements={"H": 5}, price=45),
         Offer(requirements={"H": 10}, price=80),
-        Offer(requirements={"K": 2}, price=150),
+        Offer(requirements={"K": 2}, price=120),
         Offer(requirements={"N": 3, "M": 1}, price=120),
         Offer(requirements={"P": 5}, price=200),
         Offer(requirements={"Q": 3}, price=80),
@@ -167,4 +167,5 @@ r4_catalogue = Catalogue(
         "Z": 21,
     },
 )
+
 
