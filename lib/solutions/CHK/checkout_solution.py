@@ -13,17 +13,23 @@ offers = {
 }
 
 class CheckoutSolution:
-    def checkout(self, skus: str):
+    def checkout(self, skus: str) -> int:
         if not isinstance(skus, str):
             raise ValueError("Invalid input, SKUs must be a string")
         raw_skus = [sku for sku in skus]
         counts = Counter(raw_skus)
         total_cost = 0
         for sku, count in counts.items():
-            if offer:= offers.get(sku):
+            if not products.get(sku):
+                raise ValueError("Invalid product, SKU not found")
+
+            if offer := offers.get(sku):
                 if count > offer["count"]:
                     total_cost += offer["price"] * (count // offer["count"])
-                    count -= offer["count"]
+                    count -= count % offer["count"]
+            if count:
+                total_cost += count * products[sku]
+
 
 
 
