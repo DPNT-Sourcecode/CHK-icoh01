@@ -101,7 +101,3 @@ r3_catalogue = Catalogue(
         "F": 10,
     },
 )
-
-
-
-
