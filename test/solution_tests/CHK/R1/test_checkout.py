@@ -10,10 +10,7 @@ class MockIntType:
 
 @pytest.mark.parametrize(
     "skus,expected",
-    [
-        ("ABCD", 115),
-        ("ABCDABBD",100+45+30+20+15+15 )
-    ],
+    [("ABCD", 115), ("ABCDABBD", 225)],
 )
 def test_valid_inputs(skus, expected):
     assert CheckoutSolution().checkout(skus) == expected

@@ -12,6 +12,7 @@ offers = {
     "B": {"count": 2, "price": 45},
 }
 
+
 class CheckoutSolution:
     def checkout(self, skus: str) -> int:
         if not isinstance(skus, str):
@@ -26,10 +27,10 @@ class CheckoutSolution:
             if offer := offers.get(sku):
                 if count > offer["count"]:
                     total_cost += offer["price"] * (count // offer["count"])
-                    count -= count % offer["count"]
+                    count = count % offer["count"]
             if count:
                 total_cost += count * products[sku]
 
-
+        return total_cost
 
 
