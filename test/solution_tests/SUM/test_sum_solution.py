@@ -1,8 +1,28 @@
 from lib.solutions.SUM.sum_solution import SumSolution
 import pytest
+import pydantic
 
 
-@pytest.mark.parametrize("addend1,addend2,expected", [(1, 2, 3)])
+@pytest.mark.parametrize("addend1,addend2,expected", [
+    (1, 2, 3),
+    (0, 0, 0),
+    (100, 100, 200), # assuming 0-100 is inclusive
+    (35, 66, 101),
+    (55, 92, 147),
+])
 def test_sum_valid_inputs(addend1, addend2, expected):
-    assert SumSolution().compute(1, 2) == 3
+    assert SumSolution().compute(addend1, addend2) == expected
+
+
+@pytest.mark.parametrize("addend1,addend2", [
+    (-5, 10),
+    (10, -5),
+    (-5, -5),
+])
+def test_sum_negative_inputs(addend1, addend2, expected):
+    with pytest.raises(pydantic.ValidationError) as e:
+        assert SumSolution().compute(addend1, addend2)
+
+    assert str(e.value) == f"Expected positive integer, got {addend2}"
+
 
