@@ -1,13 +1,8 @@
 from collections import Counter
 
-products = {
-    "A": 50,
-    "B": 30,
-    "C": 20,
-    "D": 15,
-}
+type Offer = tuple[dict[str, int], int]
 
-offers = [
+offers: list[Offer] = [
     ({"A": 1}, 50),
     ({"A": 3}, 130),
     ({"A": 5}, 200),
@@ -16,8 +11,16 @@ offers = [
     ({"C": 1}, 20),
     ({"D": 1}, 15),
     ({"E": 1}, 40),
-    ({"E": 2, "B": -1}, 45),
+    ({"E": 2, "B": -1}, 80),
 ]
+
+prices = {
+    "A": 50,
+    "B": 30,
+    "C": 20,
+    "D": 15,
+    "E": 40,
+}
 
 
 def calculate_cost(counts: Counter) -> int:
@@ -42,4 +45,5 @@ class CheckoutSolution:
             return -1
         counts = Counter([sku for sku in skus])
         return calculate_cost(counts)
+
 
