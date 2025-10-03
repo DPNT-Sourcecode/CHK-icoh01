@@ -17,7 +17,7 @@ class CheckoutSolution:
     def checkout(self, skus: str) -> int:
         if not isinstance(skus, str):
             raise ValueError("Invalid input, SKUs must be a string")
-        raw_skus = [sku for sku in skus]
+        raw_skus = [sku.upper() for sku in skus]
         counts = Counter(raw_skus)
         total_cost = 0
         for sku, count in counts.items():
