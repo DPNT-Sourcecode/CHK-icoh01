@@ -7,8 +7,10 @@ class Offer(pydantic.BaseModel):
     price: int
 
     def are_requirements_met(self, basket: dict[str, int]) -> bool:
-
-
+        for product, required_quantity in self.requirements.values():
+            if not basket.get(product) or basket[product] < required_quantity:
+                return False
+        return True
 
 class CheckoutSolution:
     offers: list[Offer] = [
@@ -34,8 +36,10 @@ class CheckoutSolution:
 
     def calculate_cost(self, counts: Counter) -> int:
         total_cost = 0
+        offers_in_play = []
         for offer in self.offers:
-            if
+            if offer.are_requirements_met(counts):
+                offers_in_play.append(offer)
             # get applicable offers
             # minimise for cost
             # calculate price of remaining items
@@ -45,4 +49,5 @@ class CheckoutSolution:
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
