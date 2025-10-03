@@ -8,7 +8,3 @@ class HelloSolution:
     def hello(self, friend_name: str) -> str:
         adapter.validate_python(friend_name)
         return f'Hello, {friend_name}!'
-
-
-
-
