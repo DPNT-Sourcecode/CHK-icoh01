@@ -38,16 +38,20 @@ class CheckoutSolution:
         total_cost = 0
         offers_in_play = []
         for offer in self.offers:
-            if offer.are_requirements_met(counts):
-                offers_in_play.append(offer)
             # get applicable offers
             # minimise for cost
             # calculate price of remaining items
+            if offer.are_requirements_met(counts):
+                offers_in_play.append(offer)
+        # "Offers involving multiple items always give a better discount than offers containing fewer items."
+        # so sort available offers by requirement count
+        sorted(offers_in_play, key=lambda offer: sum(offer.requirements.values()), reverse=True)
             ...
 
         return total_cost
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
