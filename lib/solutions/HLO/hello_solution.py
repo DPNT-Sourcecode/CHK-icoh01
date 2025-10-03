@@ -1,8 +1,8 @@
 from pydantic import TypeAdapter, constr, ConfigDict
 
-Name = constr()
+Name = constr(min_length=0)
 
-adapter = TypeAdapter(str, config=ConfigDict(strict=True))
+adapter = TypeAdapter(Name, config=ConfigDict(strict=True))
 
 class HelloSolution:
     def hello(self, friend_name: str) -> str:

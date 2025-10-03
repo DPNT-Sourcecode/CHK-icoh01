@@ -1,9 +1,9 @@
 from lib.solutions.HLO.hello_solution import HelloSolution
-
+import pytest
 @pytest.mark.parametrize(
-    "addend1,addend2,expected",
+    "name,expected",
     [
-        (1, 2, 3),
+        ("Matt", "Hello, Matt!"),
         (0, 0, 0),
         (100, 100, 200),  # assuming 0-100 is inclusive
         (35, 66, 101),
