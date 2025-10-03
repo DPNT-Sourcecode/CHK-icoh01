@@ -1,3 +1,5 @@
+from gettext import Catalog
+
 import pydantic
 import structlog
 from collections import Counter
@@ -49,6 +51,21 @@ class CheckoutSolution:
 
     @turn_exception_into_minus_1()
     def checkout(self, skus: str) -> int:
+        return Pricer(catalogue=r1_catalogue).checkout()
+
+
+
+class Catalogue(pydantic.BaseModel):
+    offers: list[Offer]
+    products: dict[str, int]
+
+
+class Pricer:
+    def __init__(self, catalogue: Catalogue) -> None:
+        self.offers = catalogue.offers
+        self.products = catalogue.products
+
+    def checkout(self, skus: str) -> int:
         counts = self.get_validated_count(skus)
         return self.calculate_cost(counts)
 
@@ -60,7 +77,7 @@ class CheckoutSolution:
             raise ValueError("Invalid product, not in the catalogue")
         return counts
 
-    def calculate_cost(self, counts: Counter) -> int:
+    def calculate_cost(self, counts: dict[str, int]) -> int:
         total_cost = 0
         for offer in self.offers:
             if not offer.are_requirements_met(counts):
@@ -75,4 +92,20 @@ class CheckoutSolution:
         for product, count in counts.items():
             total_cost += self.products[product] * count
         return total_cost
+
+
+r1_catalogue =    Catalogue(offers=[
+        Offer(requirements={"A": 3}, price=130),
+        Offer(requirements={"A": 5}, price=200),
+        Offer(requirements={"B": 2}, price=45),
+        Offer(requirements={"E": 2, "B": 1}, price=80),
+    ],
+
+    products = {
+        "A": 50,
+        "B": 30,
+        "C": 20,
+        "D": 15,
+        "E": 40,
+    })
 
