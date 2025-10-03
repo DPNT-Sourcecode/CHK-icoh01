@@ -19,10 +19,11 @@ def test_sum_valid_inputs(addend1, addend2, expected):
     (10, -5),
     (-5, -5),
 ])
-def test_sum_negative_inputs(addend1, addend2, expected):
+def test_sum_negative_inputs(addend1, addend2):
     with pytest.raises(pydantic.ValidationError) as e:
         assert SumSolution().compute(addend1, addend2)
 
     assert str(e.value) == f"Expected positive integer, got {addend2}"
+
 
 

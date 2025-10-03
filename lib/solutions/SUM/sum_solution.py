@@ -6,16 +6,16 @@ from pydantic import BaseModel
 
 class SumSolution:
     def compute(self, x: int, y: int) -> int:
-        SumOperation(addend1=x, addend2=y)
-        return x + y
+        return SumOperation(addend1=x, addend2=y).sum()
 
 
 class SumOperation(BaseModel):
-    addend1: typing.Annotated[int, pydantic.Field(min=0, max=100)]
-    addend2: typing.Annotated[int, pydantic.Field(min=0, max=100)]
+    addend1: typing.Annotated[int, pydantic.Field(ge=0, le=100)]
+    addend2: typing.Annotated[int, pydantic.Field(ge=0, le=100)]
 
     def sum(self) -> int:
         return self.addend1 + self.addend2
+
 
 
 
