@@ -105,7 +105,7 @@ class Pricer:
                     break
                 to_remove = min(products_to_remove, counts[req])
                 counts[req] -= to_remove
-                products_to_remove =- to_remove
+                products_to_remove -= to_remove
             total_cost += group.price * apply_count
         return total_cost
 
@@ -167,3 +167,4 @@ r4_catalogue = Catalogue(
         "Z": 21,
     },
 )
+

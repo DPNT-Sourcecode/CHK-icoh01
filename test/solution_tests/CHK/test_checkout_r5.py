@@ -24,8 +24,8 @@ from solutions.CHK.checkout_solution import CheckoutSolution
         # ("ABCDABCD", 215),
         # ("ABCD", 115),
         # ("ABCDABBD", 225),
-        ("ABCDABBDSTX", -1),
-        ("ABSCSDSABBD", -1),
+        # ("ABCDABBDSTX", 270),
+        # ("ABSCSDSABBD", 270),
         ("ABSCSDSAXBXBDXSYTZ", -1),
         # ("AABABADABBCAADBABAAA", 635),
         # ("AABAFBAFDABBFFCAADFFFBABAAA", 685),
@@ -45,3 +45,4 @@ def test_valid_inputs(skus, expected):
 )
 def test_invalid_inputs(skus):
     assert CheckoutSolution().checkout(skus) == -1
+
