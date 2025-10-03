@@ -17,8 +17,3 @@ class SumOperation(BaseModel):
 
     def sum(self) -> int:
         return self.addend1 + self.addend2
-
-
-
-
-
