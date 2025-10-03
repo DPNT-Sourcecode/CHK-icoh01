@@ -1,10 +1,9 @@
-from gettext import Catalog
-
 import pydantic
 import structlog
 from collections import Counter
 
 logger = structlog.get_logger()
+
 
 def turn_exception_into_minus_1():
     def decorator(func):
@@ -14,8 +13,16 @@ def turn_exception_into_minus_1():
             except Exception as e:
                 logger.error(e)
                 return -1
+
         return wrapper
+
     return decorator
+
+
+class CheckoutSolution:
+    @turn_exception_into_minus_1()
+    def checkout(self, skus: str) -> int:
+        return Pricer(catalogue=r1_catalogue).checkout(skus)
 
 
 class Offer(pydantic.BaseModel):
@@ -28,32 +35,6 @@ class Offer(pydantic.BaseModel):
                 return False
         return True
 
-class CheckoutSolution:
-    offers: list[Offer] = [
-        Offer(requirements={"A": 3}, price=130),
-        Offer(requirements={"A": 5}, price=200),
-        Offer(requirements={"B": 2}, price=45),
-        Offer(requirements={"E": 2, "B": 1}, price=80),
-    ]
-
-    products = {
-        "A": 50,
-        "B": 30,
-        "C": 20,
-        "D": 15,
-        "E": 40,
-    }
-
-    def __init__(self):
-        # "Offers involving multiple items always give a better discount than offers containing fewer items."
-        # so sort offers by requirement count:
-        self.offers = sorted(self.offers, key=lambda o: sum(o.requirements.values()), reverse=True)
-
-    @turn_exception_into_minus_1()
-    def checkout(self, skus: str) -> int:
-        return Pricer(catalogue=r1_catalogue).checkout()
-
-
 
 class Catalogue(pydantic.BaseModel):
     offers: list[Offer]
@@ -62,7 +43,11 @@ class Catalogue(pydantic.BaseModel):
 
 class Pricer:
     def __init__(self, catalogue: Catalogue) -> None:
-        self.offers = catalogue.offers
+        # "Offers involving multiple items always give a better discount than offers containing fewer items."
+        # so sort offers by requirement count:
+        self.offers = sorted(
+            catalogue.offers, key=lambda o: sum(o.requirements.values()), reverse=True
+        )
         self.products = catalogue.products
 
     def checkout(self, skus: str) -> int:
@@ -82,7 +67,12 @@ class Pricer:
         for offer in self.offers:
             if not offer.are_requirements_met(counts):
                 continue
-            max_apply_count = min((counts[req] // req_count for req, req_count in offer.requirements.items()))
+            max_apply_count = min(
+                (
+                    counts[req] // req_count
+                    for req, req_count in offer.requirements.items()
+                )
+            )
             if max_apply_count == 0:
                 continue
             for req, req_count in offer.requirements.items():
@@ -94,18 +84,20 @@ class Pricer:
         return total_cost
 
 
-r1_catalogue =    Catalogue(offers=[
+r1_catalogue = Catalogue(
+    offers=[
         Offer(requirements={"A": 3}, price=130),
         Offer(requirements={"A": 5}, price=200),
         Offer(requirements={"B": 2}, price=45),
         Offer(requirements={"E": 2, "B": 1}, price=80),
     ],
-
-    products = {
+    products={
         "A": 50,
         "B": 30,
         "C": 20,
         "D": 15,
         "E": 40,
-    })
+    },
+)
+
 
