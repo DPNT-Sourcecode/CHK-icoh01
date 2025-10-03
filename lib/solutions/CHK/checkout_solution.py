@@ -7,7 +7,7 @@ class Offer(pydantic.BaseModel):
     price: int
 
     def are_requirements_met(self, basket: dict[str, int]) -> bool:
-        for product, required_quantity in self.requirements.values():
+        for product, required_quantity in self.requirements.items():
             if not basket.get(product) or basket[product] < required_quantity:
                 return False
         return True
@@ -48,11 +48,18 @@ class CheckoutSolution:
         sorted_offers = sorted(offers_in_play, key=lambda o: sum(o.requirements.values()), reverse=True)
         for offer in sorted_offers:
             # apply offer, reduce counts, recheck validity
-            if not offer.are_requirements_met(counts):
+            max_apply_count = max((counts[req] // req_count for req, req_count in offer.requirements.items()))
+            if max_apply_count == 0:
                 continue
+            for req, req_count in offer.requirements.items():
+                counts[req] -= req_count * max_apply_count
+                total_cost += offer.price * max_apply_count
+        for product, count in counts.items():
+            if count == 0:
+                continue
+            total_cost += self.products[product] * count
 
             # calculate how many times offer can be applied
-            max_apply_count = max((counts[req] // req_count for req, req_count in offer.requirements.items()))
 
             # apply offer
 
@@ -62,6 +69,7 @@ class CheckoutSolution:
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
 
