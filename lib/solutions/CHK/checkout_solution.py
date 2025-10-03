@@ -50,6 +50,10 @@ class CheckoutSolution:
             # apply offer, reduce counts, recheck validity
             if not offer.are_requirements_met(counts):
                 continue
+
+            # calculate how many times offer can be applied
+            max_apply_count = max((counts[req] // req_count for req, req_count in offer.requirements.items()))
+
             # apply offer
 
             # reduce counts
@@ -58,6 +62,7 @@ class CheckoutSolution:
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
 
