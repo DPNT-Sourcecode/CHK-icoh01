@@ -35,12 +35,10 @@ def test_valid_inputs(skus, expected):
 @pytest.mark.parametrize(
     "skus",
     [
-        "ABCDZ",
+        "ABCD~",
         "abcd",
         5,
     ],
 )
 def test_invalid_inputs(skus):
     assert CheckoutSolution().checkout(skus) == -1
-
-
