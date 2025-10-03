@@ -17,7 +17,7 @@ class CheckoutSolution:
         Offer(requirements={"A": 3}, price=130),
         Offer(requirements={"A": 5}, price=200),
         Offer(requirements={"B": 2}, price=45),
-        Offer(requirements={"E": 2, "B": -1}, price=80),
+        Offer(requirements={"E": 2, "B": 1}, price=80), # <- double check this one
     ]
 
     products = {
@@ -45,13 +45,20 @@ class CheckoutSolution:
                 offers_in_play.append(offer)
         # "Offers involving multiple items always give a better discount than offers containing fewer items."
         # so sort available offers by requirement count
-        sorted(offers_in_play, key=lambda offer: sum(offer.requirements.values()), reverse=True)
-            ...
+        sorted_offers = sorted(offers_in_play, key=lambda o: sum(o.requirements.values()), reverse=True)
+        for offer in sorted_offers:
+            # apply offer, reduce counts, recheck validity
+            if not offer.are_requirements_met(counts):
+                continue
+            # apply offer
+
+            # reduce counts
 
         return total_cost
 
 def is_applicable(offer: Offer, counts: Counter) -> bool:
     required_items = offer[0]
+
 
 
 
