@@ -22,7 +22,7 @@ def turn_exception_into_minus_1():
 
 
 class CheckoutSolution:
-    # @turn_exception_into_minus_1()
+    @turn_exception_into_minus_1()
     def checkout(self, skus: str) -> int:
         return Pricer(catalogue=r4_catalogue).checkout(skus)
 
@@ -101,7 +101,7 @@ class Pricer:
                 continue
             products_to_remove = group.count * apply_count
             # sort such that most expensive is first, as per favouring the customer rule
-            sorted_reqs = sorted(group.requirements, key=lambda r: r.price, reverse=True)
+            sorted_reqs = sorted(group.requirements, key=lambda r: self.products[r], reverse=True)
             for req in sorted_reqs:
                 if not products_to_remove:
                     break
@@ -169,6 +169,7 @@ r4_catalogue = Catalogue(
         "Z": 21,
     },
 )
+
 
 
 
